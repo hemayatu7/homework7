@@ -3,9 +3,9 @@ const Hotel = require("../models/hotelSchema");
 //create a hotel
 const createHotel = async (req, res) => {
   const newHotel = new Hotel({
-    location: req.body.location,
-    type: req.body.type,
     name: req.body.name,
+    type: req.body.type,
+    location: req.body.location,
     contact: req.body.contact,
   });
   await newHotel.save();
@@ -39,10 +39,10 @@ const deleteHotel = async (req, res) => {
 const updateHotel = async (req, res) => {
   const foundHotel = await Hotel.findById(req.params._id);
   if (foundHotel) {
-    (foundHotel.day = req.body.day),
+    (foundHotel.name = req.body.name),
       (foundHotel.type = req.body.type),
-      (foundHotel.name = req.body.name),
-      (foundHotel.quantity = req.body.quantity);
+      (foundHotel.location = req.body.location),
+      (foundHotel.contact = req.body.contact);
 
     const updatedHotel = await foundHotel.save();
     res.json({ updatedHotel });

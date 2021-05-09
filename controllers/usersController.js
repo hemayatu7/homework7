@@ -1,7 +1,10 @@
 const User = require("../models/userSchema");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const { validateAddUser } = require("../validations/userValidations");
+const getToken = require("../utils/getToken")
+
+
+
 
 const addUser = async (req, res) => {
   //validate a user
@@ -22,7 +25,12 @@ const addUser = async (req, res) => {
     password: hashedPassword,
   });
   await newUser.save();
-  res.status(201).json(newUser);
+  res.status(201).json({
+    _id: newUuser._id,
+    name: newUser.name,
+    email: newUser.email,
+    token:getToken(newUser._id)
+  });
 };
 
 const userLogin = async (req, res) => {
@@ -38,12 +46,14 @@ const userLogin = async (req, res) => {
   if (!verifiedPassword)
     return res.status(404).send("invalid email or password");
 
-  //assign a token
-  const token_id = jwt.sign({ _id: user._id }, process.env.SECRET_CODE, {
-    expiresIn: "30d",
-  });
+ // res.headers("authorization",token_id).send(token_id)
+  res.status(202).json({
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    token:getToken(user._id),
+  })
 
-  res.header("authorization", token_id).send(token_id);
 };
 
 module.exports = { addUser, userLogin };

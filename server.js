@@ -13,13 +13,13 @@ const app = express();
 connectDB();
 
 //middlewares
+app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(cors());
 
 //routes
-app.use("/api/v2/hotel", hotelRoute);
-app.use("/api/v1/users", usersRoute);
+app.use("/api/v2/hotels", hotelRoute);
+app.use("/api/v2/users", usersRoute);
 
 //home
 app.get("/", (req, res) => {
